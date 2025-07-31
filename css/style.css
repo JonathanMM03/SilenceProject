@@ -1,0 +1,93 @@
+/* Custom CSS to style the range input more precisely like YouTube */
+/* This handles the track fill and specific thumb appearance */
+input[type="range"] {
+    -webkit-appearance: none; /* Override default browser styles */
+    appearance: none;
+    width: 100%;
+    cursor: pointer;
+    outline: none; /* Remove outline on focus */
+    overflow: hidden; /* Ensures the fill stays within bounds */
+}
+
+/* Webkit (Chrome, Safari, Edge) Track */
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px; /* Thinner track */
+    background: #4b5563; /* Default gray-600 for background */
+    border-radius: 9999px; /* Fully rounded track */
+    transition: background-color 0.15s ease-in-out;
+}
+
+/* Webkit (Chrome, Safari, Edge) Thumb */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default browser styles */
+    appearance: none;
+    width: 12px; /* Small circular thumb */
+    height: 12px;
+    background: #fff; /* White thumb */
+    border-radius: 9999px; /* Fully rounded */
+    border: 1px solid #fff; /* Small white border */
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0); /* Invisible initial halo */
+    transform: scale(0.7); /* Smaller initial scale */
+    margin-top: -4px; /* Adjust to vertically center thumb on track */
+    transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    /* Negative margin to "fill" the track to the left of the thumb */
+    background-image: -webkit-gradient(linear, left top, right top, color-stop(var(--thumb-position, 0%), #3b82f6), color-stop(var(--thumb-position, 0%), #4b5563)); /* Blue fill */
+}
+
+/* Webkit (Chrome, Safari, Edge) Thumb Hover/Active */
+input[type="range"]:hover::-webkit-slider-thumb,
+input[type="range"]:focus::-webkit-slider-thumb {
+    transform: scale(1); /* Enlarge thumb on hover/focus */
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.4); /* Blue halo on hover/focus */
+}
+
+
+/* Mozilla (Firefox) Track */
+input[type="range"]::-moz-range-track {
+    height: 4px;
+    background: #4b5563; /* Default gray-600 for background */
+    border-radius: 9999px;
+    transition: background-color 0.15s ease-in-out;
+}
+
+/* Mozilla (Firefox) Thumb */
+input[type="range"]::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-radius: 9999px;
+    border: 1px solid #fff;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0);
+    transform: scale(0.7);
+    transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Mozilla (Firefox) Thumb Hover/Active */
+input[type="range"]:hover::-moz-range-thumb,
+input[type="range"]:focus::-moz-range-thumb {
+    transform: scale(1);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.4);
+}
+
+/* Microsoft (Edge/IE) specific styling for fill */
+input[type="range"]::-ms-fill-lower {
+    background-color: #3b82f6; /* Blue for the filled part */
+    border-radius: 9999px;
+}
+
+input[type="range"]::-ms-fill-upper {
+    background-color: #4b5563; /* Gray for the unfilled part */
+    border-radius: 9999px;
+}
+input[type="range"]::-ms-thumb {
+    background-color: #fff;
+    border-radius: 9999px;
+    border: 1px solid #fff;
+    transform: scale(0.7);
+    transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+input[type="range"]:hover::-ms-thumb,
+input[type="range"]:focus::-ms-thumb {
+    transform: scale(1);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.4);
+}

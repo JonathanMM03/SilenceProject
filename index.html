@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Silence by Andragenix</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://unpkg.com/pcm-player"></script>
+    <script src="/js/worker.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-900 font-['Roboto'] min-h-screen flex flex-col items-center justify-start p-0">
+<div class="bg-gray-800 w-full flex-grow text-white py-8 px-4 sm:px-6 md:px-12 lg:px-20 xl:px-32">
+    <div class="flex justify-center mb-8">
+        <img src="/image/logo.png" alt="Andragenix Logo" class="w-28 h-28" />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        <div class="w-full p-6 bg-gray-700 rounded-lg">
+            <h2 class="text-center text-2xl font-bold mb-5">ESP32-S3 + I²S Digital Microphone</h2>
+            <p class="text-base text-center mb-8 text-gray-400">Conéctate al WebSocket presionando el botón [Connect]</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+                <button id="connectBtn" onclick="connect()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-md transition duration-200 ease-in-out text-lg w-full sm:w-auto">Connect</button>
+                <button id="disconnectBtn" onclick="disconnect()" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-md transition duration-200 ease-in-out text-lg w-full sm:w-auto">Disconnect</button> <button id="pauseBtn" onclick="pause()" class="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-6 py-3 rounded-md transition duration-200 ease-in-out text-lg w-full sm:w-auto">Pause</button>
+                <button id="continueBtn" onclick="continuePlay()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-md transition duration-200 ease-in-out text-lg w-full sm:w-auto">Continue</button>
+            </div>
+            <label for="range" class="block text-center mb-4 text-lg font-medium">Volumen</label>
+            <input type="range" max="1" value="0.5" min="0" id="range" onchange="changeVolume(event)" step="0.1" class="w-full" />
+        </div>
+
+        <div id="graph" class="w-full h-80 lg:h-96 bg-black rounded-lg overflow-hidden"></div>
+    </div>
+</div>
+
+<div class="w-full h-10 bg-cyan-700 flex items-center justify-center text-base font-light text-gray-200">
+    Silence by Andragonix
+</div>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
