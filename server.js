@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const WebSocket = require("ws");
 const os = require("os");
+const cors = require("cors");
 
 const app = express();
 
@@ -26,6 +27,9 @@ function getLocalIp() {
 }
 
 const localIp = getLocalIp();
+
+// Habilitar CORS para todas las rutas
+app.use(cors());
 
 // Servidor WebSocket
 const wsServer = new WebSocket.Server({ port: WS_PORT }, () =>
