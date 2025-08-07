@@ -6,8 +6,8 @@ const cors = require("cors");
 
 const app = express();
 
-const WS_PORT = process.env.WS_PORT || 8888;
-const HTTP_PORT = process.env.HTTP_PORT || 8000;
+const WS_PORT = 8888;
+const HTTP_PORT = 80;
 
 // Obtener IP local automáticamente
 function getLocalIp() {
