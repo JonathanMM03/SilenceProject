@@ -50,63 +50,62 @@ Plotly.newPlot('graph', [{
 let player;
 
 // Function to handle connection
-window.connect = function connect() {
-    // If a WebSocket already exists and is open, close it first
+window.connect = async function connect() {
     if (ws && ws.readyState === WebSocket.OPEN) {
         console.log("Existing WebSocket is open, closing before new connection.");
         ws.close();
     }
 
-    // Disable connect button immediately to prevent multiple clicks
     connectBtn.disabled = true;
-    connectBtn.textContent = 'Connecting...'; // Provide feedback
+    connectBtn.textContent = 'Connecting...';
 
-    const WS_URL = 'ws://localhost:8888';
-    ws = new WebSocket(WS_URL); // Assign to the global 'ws' variable
-    ws.binaryType = 'arraybuffer';
+    try {
+        const response = await fetch('/api/ip');
+        const { ip, port } = await response.json();
+        const WS_URL = `ws://${ip}:${port}/`;
 
-    ws.onopen = function() {
-        console.log('WebSocket Connected');
-        connectBtn.textContent = 'Connected'; // Change button text
-        // Now that we're connected, enable pause and potentially continue
-        // We'll add a new button for Disconnect
-        // For now, enable pause/continue, assuming connection implies starting playback
-        pauseBtn.disabled = false;
-        continueBtn.disabled = false; // Player might be paused after connect, but buttons are active
-    };
+        ws = new WebSocket(WS_URL);
+        ws.binaryType = 'arraybuffer';
 
-    ws.onmessage = function (event) {
-        if (continueBtn.disabled === false) { // Only feed if not explicitly paused
-            player.feed(event.data);
-            worker.postMessage(event.data);
+        ws.onopen = function() {
+            console.log('WebSocket Connected');
+            connectBtn.textContent = 'Connected';
+            pauseBtn.disabled = false;
+            continueBtn.disabled = false;
+        };
+
+        ws.onmessage = function (event) {
+            if (!continueBtn.disabled) {
+                player.feed(event.data);
+                worker.postMessage(event.data);
+            }
+        };
+
+        ws.onclose = function() {
+            console.log('WebSocket Disconnected');
+            connectBtn.disabled = false;
+            connectBtn.textContent = 'Connect';
+            pauseBtn.disabled = true;
+            continueBtn.disabled = true;
+            if (player) player.destroy();
+            player = null;
+            ws = null;
+        };
+
+        ws.onerror = function(error) {
+            console.error('WebSocket Error:', error);
+            if (ws) ws.close();
+            alert('WebSocket connection failed.');
+        };
+
+        if (!player) {
+            player = new PCMPlayer({ inputCodec: 'Int16', channels: 1, sampleRate: 44100 });
         }
-    };
-
-    ws.onclose = function() {
-        console.log('WebSocket Disconnected');
-        // Reset button states to initial disconnected state
+    } catch (err) {
+        console.error('Failed to fetch IP:', err);
+        alert('No se pudo obtener la IP del servidor.');
         connectBtn.disabled = false;
-        connectBtn.textContent = 'Connect'; // Reset button text
-        pauseBtn.disabled = true;
-        continueBtn.disabled = true;
-        player.destroy(); // Clean up player resources
-        player = null; // Clear player instance
-        ws = null; // Clear WebSocket instance
-    };
-
-    ws.onerror = function(error) {
-        console.error('WebSocket Error:', error);
-        // On error, treat as a disconnection
-        if (ws) {
-            ws.close(); // Ensure connection is closed on error
-        }
-        alert('WebSocket connection failed. Please check the server and try again.');
-        // onclose will handle button states
-    };
-
-    // Initialize PCM Player only when connecting
-    if (!player) { // Prevent re-initializing if player exists
-        player = new PCMPlayer({ inputCodec: 'Int16', channels: 1, sampleRate: 44100 });
+        connectBtn.textContent = 'Connect';
     }
 }
 

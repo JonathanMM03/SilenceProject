@@ -69,6 +69,10 @@ app.get("/audio", (req, res) =>
     res.sendFile(path.resolve(__dirname, "./index.html"))
 );
 
+app.get("/api/ip", (req, res) => {
+  res.json({ ip: localIp, port: WS_PORT });
+});
+
 app.listen(HTTP_PORT, () =>
     console.log(`🌐 Servidor HTTP escuchando en http://${localIp}:${HTTP_PORT}`)
 );
